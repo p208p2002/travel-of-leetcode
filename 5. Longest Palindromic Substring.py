@@ -1,50 +1,42 @@
 class Solution:
-    def judgePalindromic(self,s:str):
-        if(len(s)<=1):
-            return True
-        loop = 0
-        sLen = len(s)
-        while(sLen>=2):
-            # print(loop,s)
-            head = s[0]
-            end = s[sLen-1]
-
-            if(s[0] == s[sLen-1]):
-                s = s[1:-1]
-                sLen = len(s)
-            elif(s[0] != s[sLen-1]):
-                return False
-            else:
-                return False
-            loop+=1
-        return True
-
-
     def longestPalindrome(self, s: str) -> str:
-        # print(self.judgePalindromic(s))
+        if(s == '' or len(s)==1):
+            return s
 
-        if(s == ''):
-            return ''
-        headIndex = 0
         rec = s[0]
-        sLen = len(s)
-        rLen = len(rec)
+        for i in range(len(s)):
+            #single center
+            left = i-1
+            right = i+1
+            try:
+                while(s[left] == s[right]):
+                    # print("S:",s[left:right+1],left,right)
+                    res = s[left:right+1]
+                    if(len(res)>len(rec)):
+                        rec = res
+                    left -= 1
+                    right += 1
+            except:
+                pass
 
-        while(len(s) != (headIndex+1)):
-            for i in range(sLen,0,-1):
-                if(headIndex == i-1):
-                    break
-                elif(rLen>=sLen-(headIndex)):
-                    return rec
-                elif(s[headIndex] == s[i-1]):
-                    testStr = s[headIndex:i]
-                    tLen = len(testStr)
-                    if(tLen<rLen):
-                        continue
-                    elif(self.judgePalindromic(testStr) and (tLen > rLen)):
-                        # print(testStr,rec)
-                        rec = testStr
-                        rLen = len(rec)
-                    #break
-            headIndex += 1
+            #dual center
+            try:
+                if(s[i] == s[i+1]):
+                    #
+                    res = s[i]+s[i+1]
+                    if(len(res)>len(rec)):
+                        rec = res
+                    #
+                    left2 = i-1
+                    right2 = i+2
+                    while(s[left2] == s[right2]):
+                        # print("D:",s[left2:right2+1],left2,right2)
+                        res = s[left2:right2+1]
+                        if(len(res)>len(rec)):
+                            rec = res
+                        left2 -= 1
+                        right2 += 1
+            except:
+                pass
+
         return rec
